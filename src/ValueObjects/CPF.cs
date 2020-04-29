@@ -7,9 +7,9 @@ namespace ValueObjects
     {
         public string Numero { get; }
 
-        public bool Mascara { get; set; }
+        public bool ExibirMascara { get; set; }
 
-        public CPF(string valor)
+        public CPF(string valor, bool exibirMascara = false)
         {
             if (string.IsNullOrEmpty(valor))
                 throw new ArgumentNullException(nameof(valor));
@@ -18,6 +18,7 @@ namespace ValueObjects
                 throw new ArgumentException("CPF inválido");
 
             Numero = RemoverMascara(valor);
+            ExibirMascara = exibirMascara;
         }
 
         private static readonly IList<string> NumerosInvalidos = new List<string>
@@ -98,7 +99,7 @@ namespace ValueObjects
             return cpf.EndsWith(digito);
         }
 
-        public override string ToString() => ToString(true);
+        public override string ToString() => ToString(ExibirMascara);
 
         public string ToString(bool mascara)
         {
@@ -129,5 +130,8 @@ namespace ValueObjects
         }
 
         public static implicit operator CPF(string value) => new CPF(value);
+
+        public static implicit operator string(CPF value) 
+            => value?.ToString(value.ExibirMascara);
     }
 }

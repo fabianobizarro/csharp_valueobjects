@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Shouldly;
+﻿using Shouldly;
 using Xunit;
 
 namespace ValueObjects.Tests
@@ -37,7 +34,7 @@ namespace ValueObjects.Tests
         [InlineData("12345678912348949")]
         [InlineData("1234567981")]
         [InlineData("87654321--4165")]
-        public void TryParse_(string number)
+        public void TryParse_CaractetesInvalidos_DeveRetornarFalse(string number)
         {
             // Arrange, Act
             var result = CPF.TryParse(number, out var cpf);
@@ -69,7 +66,7 @@ namespace ValueObjects.Tests
         }
 
         [Fact]
-        public void teste()
+        public void ToString_AplicarMascara()
         {
             // Arrange
             const string ValorEsperado = "288.777.748-35";
@@ -80,6 +77,22 @@ namespace ValueObjects.Tests
 
             // Assert
             result.ShouldNotBeNullOrWhiteSpace();
+            result.ShouldBe(ValorEsperado);
+        }
+
+        [Fact]
+        public void ExibirMascara_True_DeveExibirMascara()
+        {
+            // Arrange
+            const string ValorEsperado = "288.777.748-35";
+
+            // Act
+            var cpf = new CPF("28877774835", true);
+            string result = cpf;
+
+            // Assert
+            result.ShouldNotBeEmpty();
+            result.ShouldNotBeNull();
             result.ShouldBe(ValorEsperado);
         }
 
